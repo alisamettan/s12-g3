@@ -1,11 +1,11 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { useFetchData } from "../hooks/useFetchData";
 
 export const ProductContext = createContext();
 
 export function ProductContextProvider({ children }) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: products, loading, error } = useFetchData("/products");
 
   const instance = axios.create({
     baseURL: "https://fakestoreapi.com/products",
@@ -13,16 +13,8 @@ export function ProductContextProvider({ children }) {
     headers: { "X-Custom-Header": "foobar" },
   });
 
-  useEffect(() => {
-    setLoading(true);
-    instance.get().then((res) => {
-      setProducts([...res.data]);
-      console.log(res.data);
-      setLoading(false);
-    });
-  }, []);
   return (
-    <ProductContext.Provider value={{ products, loading }}>
+    <ProductContext.Provider value={{ products, loading, error }}>
       {children}
     </ProductContext.Provider>
   );

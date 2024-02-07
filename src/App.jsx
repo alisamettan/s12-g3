@@ -7,13 +7,13 @@ import {
 } from "./context/ProductsContext";
 
 function App() {
-  const { products, loading } = useContext(ProductContext);
-
-  if (loading) return <h1>Loading....</h1>;
+  const { products, loading, error } = useContext(ProductContext);
 
   return (
     <>
       <div className="flex flex-row flex-wrap gap-10 justify-center items-center ">
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
         {products.map((product) => {
           return (
             <div className="w-1/4 bg-slate-600 rounded-lg p-10">
